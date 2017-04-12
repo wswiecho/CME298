@@ -1,0 +1,329 @@
+\documentclass{article} % For LaTeX2e
+\usepackage{cos424,times}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{wrapfig}
+% For LaTeX2e
+\usepackage{cos424,times}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{booktabs}
+% packages that allow mathematical formatting
+\usepackage{setspace}
+% package that allows you to change spacing
+\usepackage{comment}
+% text become 1.5 spaced
+
+\usepackage{fullpage}
+% package that specifies normal margins
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{subfig}
+\usepackage{bbm}
+\usepackage{multirow}
+\usepackage{booktabs}
+
+\title{CME298 HW1}
+
+
+\author{
+Weronika J Swiechowicz\\
+Stanford University\\
+\texttt{wswiecho@stanford.edu} \\
+}
+
+\newcommand{\fix}{\marginpar{FIX}}
+
+\usepackage{xcolor}
+%\usepackage{mathbb}
+\usepackage{sympytex}
+\usepackage{color}
+\usepackage{sectsty}
+\sectionfont{\LARGE\underline}
+\subsectionfont{\underline\normalsize}
+\subsubsectionfont{\underline\normalsize\itshape}
+
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\lstset{ %
+backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+basicstyle=\footnotesize,
+flexiblecolumns=true      % the size of the fonts that are used for the code
+breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+breaklines=true,                 % sets automatic line breaking
+captionpos=b,                    % sets the caption-position to bottom
+commentstyle=\color{mygreen},    % comment style
+deletekeywords={...},            % if you want to delete keywords from the given language
+    escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+    extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+    frame=single,                    % adds a frame around the code
+    keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+    keywordstyle=\color{blue},       % keyword style
+    language=Matlab,                 % the language of the code
+    otherkeywords={*,...},           % if you want to add more keywords to the set
+    numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+    numbersep=5pt,                   % how far the line-numbers are from the code
+    numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+    %rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+    showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+    showstringspaces=false,          % underline spaces within strings only
+    showtabs=false,                  % show tabs within strings adding particular underscores
+    stepnumber=2,                    % the step between two line-numbers. If it's 1, each line will be numbered
+    stringstyle=\color{mymauve},     % string literal style
+    tabsize=2,                     % sets default tabsize to 2 spaces
+    title=\lstname,
+    % Single frame around code                               % show the filename of files included with \lstinputlisting; also try caption instead of title
+    }
+    
+    \newcommand{\E}{{\mbox {\bf E}}}
+    \newcommand{\me}{\mathrm{e}}
+    \newcommand{\I}{\mathbbm{1}}
+    \newcommand{\R}{\mathbbm{R}}
+    \newcommand{\Q}{\mathbbm{Q}}
+    \newcommand{\Z}{\mathbb{Z}}
+    \newcommand{\N}{\operatorname{N}}
+    \newcommand{\C}{\operatorname{C}}
+    \newcommand{\f}[1][]{\hat{#1}}
+    \newcommand{\rev}[1]{\frac{1}{#1}}
+    % \newcommand{+binomial}[3][2]{(#2 + #3)^#1}
+    \newcommand{\prev}[1]{#1_{t-1}}
+    \newcommand{\nex}[1]{#1_{t+1}}
+    \newcommand{\now}[1]{#1_t}
+    \newcommand{\ttwo}[1]{\now{#1}^{2}}
+    \newcommand*{\dprime}{^{\prime\prime}\mkern-1.2mu}
+    \newcommand*{\tprime}{^{\prime\prime\prime}\mkern-1.2mu}
+    
+    \newcommand{\ptwo}[1]{\prev{#1^{2}}}
+    \newcommand{\h}[1]{\expandafter\hat#1}
+    \newcommand{\ti}[1]{\widetilde{#1}}
+    \newcommand{\B}[1]{\mathbf#1}
+    \newcommand{\ii}[1]{\mathit#1}
+    \newcommand{\that}[1]{\mathbf{\hat{#1}}}
+    \newcommand{\ttil}[1]{\mathbf{\tilde{#1}}}
+    \newcommand{\new}{\marginpar{NEW}}
+    \begin{document}
+    \newcommand{\argmin}{\operatornamewithlimits{argmin}}
+    \maketitle
+    
+    
+    
+ \section{Problem 1}
+ \begin{enumerate}
+ \item Let $(X_1, X_2)$ be multivariate normal distribution $N(\mu, \Sigma)$ where $\mu=(\mu_1, \mu_2)$ and $\Sigma$ is a 2$\times$2 positive definite matrix. Assume that $X_1$ and $X_2$ are uncorrelated, i.e., 
+ \[  \Sigma_{12} = \E[(X_1-\mu_1)(X_2-\mu_2)] = 0\]
+ Show that $X_1$ and $X_2$ are independent, i.e., 
+ \[P(X_1\le x_1, X_2\le x_2) = P(X_1\le x_1)P(X_2\le x_2)\]
+ 
+\rule{\textwidth}{1pt}
+We have that $(X_1, X_2)$ be multivariate normal distribution $N(\mu, \Sigma)$, which allows us to write the joint probability as
+ \[P(X_1\le x_1, X_2\le x_2) = \frac{1}{2\pi|\Sigma|}e^{-\frac{1}{2} (x-u)^T\Sigma^{-1}(x-u)  }    \]
+where $x^T=(x_1, x_2)$ and $\mu^T=(\mu_1, \mu_2)$. Also, we have that 
+\[\Sigma = \begin{bmatrix} \sigma_1^2 & 0 \\ 0 & \sigma_2^2 \end{bmatrix}, \ \ \ \ \  \Sigma^{-1} = \begin{bmatrix} \frac{1}{\sigma_1^2} & 0 \\ 0 & \frac{1}{\sigma_2^2} \end{bmatrix}. \]
+So, 
+\[ |\Sigma| = \sqrt{\sigma_1^2\sigma_2^2-0} = \sigma_1\sigma_2\]
+\[ (x-u)\Sigma^{-1}(x-u) = \begin{bmatrix} \frac{x_1-\mu_1}{\sigma_1^2} & \frac{x_2-\mu_2}{\sigma_2^2} \end{bmatrix} \begin{bmatrix} x_1-\mu_1 \\ x_2-\mu_2 \end{bmatrix} = \frac{(x_1-\mu_1)^2}{\sigma_1^2} + \frac{(x_2-\mu_2)^2}{\sigma_2^2}.      \]
+\begin{align*}
+P(X_1\le x_1, X_2\le x_2) &= \frac{1}{2\pi\sigma_1\sigma_2}e^{-\frac{1}{2} \Big(\frac{(x_1-\mu_1)^2}{\sigma_1^2} + \frac{(x_2-\mu_2)^2}{\sigma_2^2}  \Big)  }  \\
+&=  \frac{1}{\sqrt{2\pi}\sigma_1}\frac{1}{\sqrt{2\pi}\sigma_2} e^{-\frac{1}{2}\frac{(x_1-\mu_1)^2}{\sigma_1^2}} e^{-\frac{1}{2} \frac{(x_2-\mu_2)^2}{\sigma_2^2}  } \\
+&=  \frac{1}{\sqrt{2\pi}\sigma_1}e^{-\frac{1}{2}\frac{(x_1-\mu_1)^2}{\sigma_1^2}} \frac{1}{\sqrt{2\pi}\sigma_2} e^{-\frac{1}{2} \frac{(x_2-\mu_2)^2}{\sigma_2^2}  } \\
+&=P(X_1\le x_1)P(X_2\le x_2)
+\end{align*}
+Hence, by the definition, we have shown that $X_1$ and $x_2$ are independent.
+
+\rule{\textwidth}{1pt}
+\item Now let $Y\sim U([0,1])$ be uniform distributed in the interval [0,1]. Consider the random variables, 
+\begin{align*}
+Y_1&=\sin(2\pi Y) \\
+Y_2&=\cos(2\pi Y) 
+\end{align*}
+\begin{enumerate} 
+\item Show that $Y_1$ and $Y_2$ are uncorrelated.  \\
+\rule{\textwidth}{1pt}
+To show that $Y_1$ and $Y_2$ are uncorrelated, we need to show that $$\E[(Y_1-\mu_1)(Y_2-\mu_2)] = 0.$$
+\begin{align*}
+\E[(Y_1-\mu_1)(Y_2-\mu_2)] &= \E(Y_1Y_2 -Y_1\mu_2 - Y_2\mu_1 + \mu_1\mu_2) \\
+& = \E(Y_1Y_2) -\E(Y_1\mu_2) - \E(Y_2\mu_1) + \E(\mu_1\mu_2) \\
+& = \E(Y_1Y_2) -\mu_2\E(Y_1) - \mu_1\E(Y_2) + \mu_1\mu_2 \\
+& = 0
+\end{align*}
+\[ \E(Y_1) = \int_{0}^1 \sin(2\pi y)dy = -\frac{1}{2\pi} \cos(2\pi y)|_{0}^1 = 0   \] 
+\[ \E(Y_2) = \int_{0}^1 \cos(2\pi y)dy = \frac{1}{2\pi} \sin(2\pi y)|_{0}^1 = 0   \] 
+\[ \E(Y_1Y_2) = \int_{0}^1 \cos(2\pi y)\sin(2\pi y)dy =  \frac{1}{2}\int_{0}^1 \sin(4\pi y)dy = -\frac{1}{8\pi} \cos(4\pi y)|_{0}^1 = 0   \] 
+Hence, we have that $Y_1$ and $Y_2$ are uncorrelated. \\
+\rule{\textwidth}{1pt}
+\item Are they independent? \\
+\rule{\textwidth}{1pt}
+To show that these variables are not independent we show that $Y_1^2+Y_2^2 \not=0$. 
+\begin{align*}
+Y_1^2+Y_2^2 &= \sin^2(2\pi Y) + \cos^2(2\pi Y) =1
+\end{align*}
+Hence, $Y_1$ and $Y_2$ are not independent. 
+
+\rule{\textwidth}{1pt}
+\end{enumerate}
+ \end{enumerate}
+
+ \section*{Problem 2}
+Let $X = (X_1,...,X_n)$ be a multivariate normal distribution $N(\mu,\sigma)$, where $\mu = (\mu_1,...,\mu_n)$ and $\sigma$ is a $n \times n$ positive definite covariance matrix. For any invertible matrix $A \in R^{n\times n}$ and vector $b \in R^n$, define
+\[Y = AX + b\]
+\begin{enumerate}
+\item Find the distribution of Y .\\
+\rule{\textwidth}{1pt}
+\begin{align*}
+F(y) = P(Y\le y)
+\end{align*}
+Since, we have that $Y=AX+b$, it follows that 
+\begin{align*}
+P(AX+b\le y) = P(X \le A^{-1}(y-b))
+\end{align*}
+The above is possible because $A$ is invertible, so
+\begin{align*}
+F(y) &= P(X \le A^{-1}(y-b)) \\
+&= \frac{1}{(2\pi)^{1/n}|\Sigma|} \int_{-\infty}^{A^{-1}(y-b)}e^{-\frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu)}dx
+\end{align*}
+To rewrite the upper bound of the integral only in terms of $y$ we let $x=A^{-1}(z-b)$. The derivative with respect to $x$ of $x=A^{-1}(z-b)$ is $dx=A^{-1}dz$, which we substitute back into the above equation getting
+\begin{align*}
+F(y) &= \frac{A^{-1}}{(2\pi)^{1/n}|\Sigma|} \int_{-\infty}^{y}e^{-\frac{1}{2}\Big[A^{-1}\big(z-(A\mu+b)\big)\Big]^T\Sigma^{-1}\Big[A^{-1}\big(z-(A\mu+b)\big)\Big]}dz
+\end{align*}
+The density function, $f$ for Y is simply the derivative of F. So, by the fundamental theorem of calculus, we have that
+\begin{align*}  
+f(y) &= \frac{d}{dy} \Bigg(  \frac{A^{-1}}{(2\pi)^{1/n}|\Sigma|} \int_{-\infty}^{y}e^{-\frac{1}{2}\Big[A^{-1}\big(z-(A\mu+b)\big)\Big]^T\Sigma^{-1}\Big[A^{-1}\big(z-(A\mu+b)\big)\Big]}dz  \Bigg) \\
+&= \frac{A^{-1}}{(2\pi)^{1/n}|\Sigma|} e^{-\frac{1}{2}\Big[\big(y-(A\mu+b)\big)\Big]^TA^{-T}\Sigma^{-1}A^{-1}\Big[\big(y-(A\mu+b)\big)\Big]} 
+\end{align*}
+Hence, it should be clear that the density function for Y is the pdf of the normally distributed variable with mean $\hat{\mu} = A\mu+b$ and $\hat{\Sigma} = \Big(A^{-T}\Sigma^{-1}A^{-1}\Big)^{-1}$.
+~\\
+\rule{\textwidth}{1pt}
+\item Suppose you can sample from standard normal distribution $N(0,1)$, how do you generate samples of random vectors from $N(\mu,\sigma)$?
+
+\rule{\textwidth}{1pt}
+By the CLT, we have that 
+\[  \frac{\sqrt{n}(\bar{X}-\mu)}{\sigma} \to N(0,1)  \]
+that convergence is in distribution. Thus, it can be easily see that when we rewrite the above equation to give us
+\[  \bar{X} \approx  \mu + \frac{\sigma}{\sqrt{n}}N(0,1)\]
+So, we generate samples of random vectors from $N(\mu,\sigma)$, by substituting the value of $\mu$ and $\sigma$ into the following equation 
+\[\mu + \frac{\sigma}{\sqrt{n}}N(0,1).\]
+
+\rule{\textwidth}{1pt}
+\end{enumerate}
+
+
+
+\section*{Problem 3}
+Let $X_1, X_2,... , X_n$ be independent identically distributed random variables with mean $\mu$ and variance $\sigma^2$. Assume they also have finite fourth moment. Let $\bar{X}_n = (X_1 + X_2 + \dotsc+ X_n)/n$ be the sample mean and
+\[  \sigma^2_n = \frac{1}{n-1}\sum_{i=1}^n (X_i-\bar{X}_n)^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i^2- 2X_i \bar{X}_n + \bar{X}_n) \]
+be the sample variance.
+\begin{enumerate}
+\item Compute $E(\sigma^2_n)$. \\
+The below computation shows that $\E(\sigma^2_n)=\sigma^2$. 
+
+\rule{\textwidth}{1pt}
+\begin{align*}
+\E(\sigma^2_n) &= \E\Bigg( \frac{1}{n-1}\Big(\sum_{i=1}^nX_i^2- 2\bar{X}_n\sum_{i=1}^nX_i  + \sum_{i=1}^n\bar{X}_n^2\Big)  \Bigg) \\
+&=  \frac{1}{n-1} \E\Bigg(\sum_{i=1}^nX_i^2\Bigg)- \frac{2}{n-1} \E\Bigg(\bar{X}_n\sum_{i=1}^nX_i \Bigg) + \frac{1}{n-1} \E\Bigg(n\bar{X}_n^2  \Bigg) \\
+&=  \frac{1}{n-1} \sum_{i=1}^n\E\Big(X_i^2\Big)- \frac{2}{n-1} \E\Bigg(n\bar{X}_n^2\Bigg) + \frac{n}{n-1} \E\Bigg(\bar{X}_n^2  \Bigg) \\
+&=  \frac{1}{n-1} \sum_{i=1}^n(\sigma^2+\mu^2)- \frac{n}{n-1} \E\Big(\bar{X}_n^2\Big)  \\
+&=  \frac{n}{n-1} (\sigma^2+\mu^2)- \frac{2}{n-1} \E\Bigg(n\bar{X}_n^2\Bigg) + \frac{n}{n-1} \E\Bigg(\bar{X}_n^2  \Bigg) \\
+&= \frac{n}{n-1} (\sigma^2+\mu^2) - \frac{n}{n-1} \E\Big(\bar{X}_n^2\Big)  \\
+&= \frac{n}{n-1} (\sigma^2+\mu^2) - \frac{n}{n-1} \Bigg(\frac{\sigma^2}{n}+\mu^2\Bigg)  \\
+&= \sigma^2
+\end{align*}
+
+\rule{\textwidth}{1pt}
+\item The LLN tells $\bar{X}_n\to \mu$ as $n\to\infty$, what is the limit of $\sigma^2_n$? 
+
+\rule{\textwidth}{1pt}
+The the theory we have that 
+\[  \frac{1}{n}\sum_{i=1}^n X_i^2 \xrightarrow[]{p} \E(X_i^2) = \mu^2+\sigma^2. \]
+\[  \frac{1}{n}\sum_{i=1}^n X_i \xrightarrow[]{p} \mu. \]
+That allows us to find the following limit, as follows
+\begin{align*}
+\lim_{n\to\infty} \sigma^2_n &= \lim_{n\to\infty}  \frac{1}{n-1}\sum_{i=1}^n (X_i^2- 2X_i \bar{X}_n + \bar{X}_n) \\
+ &= \lim_{n\to\infty}  \frac{n}{n-1}\Bigg(\frac{1}{n} \sum_{i=1}^n X_i^2   - \Bigg(\frac{1}{n}\sum_{i=1}^n \bar{X}_n\Bigg)^2\Bigg) \\
+ &= \lim_{n\to\infty}  \frac{n}{n-1}\Bigg(\frac{1}{n} \sum_{i=1}^n X_i^2\Bigg)  - \lim_{n\to\infty}  \frac{n}{n-1}\Bigg(\frac{1}{n}\sum_{i=1}^n \bar{X}_n\Bigg)^2 \\
+\end{align*}
+By the above convergence in probability we can write 
+\begin{align*}
+\lim_{n\to\infty} \sigma^2_n &= \lim_{n\to\infty}  \frac{n}{n-1} (\mu^2+\sigma^2)  - \lim_{n\to\infty}  \frac{n}{n-1}\mu^2 \\
+&= \lim_{n\to\infty}  \frac{n}{n-1} \sigma^2  = \sigma^2
+\end{align*}
+Hence, we have shown that the limit of $\sigma^2_n$ as $n\to\infty$ is simply $\sigma^2$.
+
+\rule{\textwidth}{1pt}
+\end{enumerate}
+\section*{Problem 4}
+Let $X_1 ,X_2 ,...,X_n$ be independent Bernoulli random variables with $P(X_j^{(n)} = 1) = p_n$ and $P(X_j^{(n)} = 0) = 1-p_n$. That is, for each $n$ they are independent and identically distributed but the probability of ''success'' $p_n$ depends on $n$. Let $Z_n = X_1 +X_2 +\cdots+X_n$. Suppose that $p_n = \lambda/n$ with $\lambda$ a positive number. Show that $Z_n$ converges in distribution to a Poisson random variable $Z$, where
+\[ P(Z=k) = e^{-\lambda} \frac{\lambda^k}{k!}, \ \ \ k = 0,1,2,3, \dotsc\]
+\begin{enumerate}
+\item Find the distribution of Y .
+
+\rule{\textwidth}{1pt}
+We want to show that $\sum_{i=1}^n X_i^{(n)} \to \frac{\lambda^k}{k!}$ where $p_n = \lambda/n$.
+\begin{align*}
+\phi_n(\alpha) &= \E\Big( e^{i\alpha \sum_{i=1}^n X_i^{(n)}}  \Big) = \E\Bigg( \prod_{i=1}^ne^{i\alpha X_i^{(n)}}  \Bigg) = \prod_{i=1}^n\E\Big(e^{i\alpha X_i^{(n)}}  \Big) = \E\Big(e^{i\alpha X_i^{(n)}}  \Big)^n \\
+&= \E\Bigg( 1+ (e^{i\alpha}-1) X_i^{(n)}  \Bigg)^n =  \Big( 1+ (e^{i\alpha}-1) p_n  \Big)^n= \Bigg( 1+ \frac{(e^{i\alpha}-1) \lambda}{n}  \Bigg)^n \xrightarrow[]{p} e^{(e^{i\alpha}-1)\lambda}
+\end{align*}
+Since, $e^{(e^{i\alpha}-1)\lambda}$ is the characteristic function of the Poisson random variable $X$, it follows that $Y$ follows the Poisson distribution with $p_n = \lambda/n$.
+
+\rule{\textwidth}{1pt}
+\end{enumerate}
+
+
+
+
+
+\section*{Problem 5}
+The Brownian motion process $B_t$, $0 \le t \le T$, is a family of random variables with the following property: Let $\{ti\}_{i=0}^N$ be any partition of the interval [0,T] with $t_0 = 0$, $t_N = T$ and $t_i - t_{i-1} = T/N = \Delta N$. Then $\{B_{t_i} - B_{t_{i-1}} \}_{i=1}^N$ are i.i.d. normal random variables with mean 0 and variance $\Delta N$. \\
+Consider the process $X_t = \sigma B_t$ with $\sigma > 0$ representing the volatility. We observe $\{X_{t_i} \}^N_{i=0}$ and want to estimate the volatility $\sigma$. Define $\Delta_iX = X_{t_i} - X_{t_{i-1}}$ . Show that
+\[ \frac{1}{\sqrt{\Delta_N}} \Bigg(\sum_{i=1}^N |\Delta_iX|^2-T\sigma^2  \Bigg) \to N(0, 2T\sigma^4) \]
+as $N\to\infty, \Delta_N\to0, N\Delta_N=T$. This also means $\frac{1}{T}\sum_{i=1}^N |\Delta_iX|^2$ is a consistent estimate of $\sigma^2$. 
+
+\rule{\textwidth}{1pt}
+By the above description we have that $\{B_{t_i} - B_{t_{i-1}} \}_{i=1}^N \sim N(0, \Delta N)$. We also know that by the property of the Brownian motion, we can write 
+\[ \frac{|\Delta_i X|^2}{\sigma^2\Delta_N} = \Bigg|\frac{B_{t_i}-B_{t_{i-1}}}{\sqrt{\Delta_N}}\Bigg|.   \]
+So, by the CLT
+\[  \sqrt{N} \Bigg( \frac{1}{N} \sum_{i=1}^N \frac{|\Delta_i X|^2}{\sigma^2\Delta_N} -1  \Bigg)\xrightarrow[]{D} N(0,2)    \]
+Now, given that $N\Delta_N=T$, we can even further modify the above equation
+\[  \sqrt{\frac{T}{\Delta_N}} \Bigg( \frac{\Delta_N}{T} \sum_{i=1}^N \frac{|\Delta_i X|^2}{\sigma^2\Delta_N} -1  \Bigg)\xrightarrow[]{D} N(0,2)    \]
+\[  \sqrt{\frac{T}{\Delta_N}} \Bigg( \frac{1}{T} \sum_{i=1}^N \frac{|\Delta_i X|^2}{\sigma^2} -1  \Bigg)\xrightarrow[]{D} N(0,2)    \]
+\[  \sqrt{\frac{T}{\Delta_N}} \Bigg( \frac{1}{T\sigma^2} \sum_{i=1}^N |\Delta_i X|^2 -1  \Bigg)\xrightarrow[]{D} N(0,2)    \]
+\[  \sqrt{\frac{T}{\Delta_N}}  \frac{1}{T\sigma^2} \Bigg( \sum_{i=1}^N |\Delta_i X|^2 -T\sigma^2  \Bigg)\xrightarrow[]{D} N(0,2)    \]
+\[  \sqrt{\frac{1}{\Delta_N}}  \frac{1}{\sqrt{T}\sigma^2} \Bigg( \sum_{i=1}^N |\Delta_i X|^2 -T\sigma^2  \Bigg)\xrightarrow[]{D} N(0,2)    \]
+\[  \sqrt{\frac{1}{\Delta_N}} \Bigg( \sum_{i=1}^N |\Delta_i X|^2 -T\sigma^2  \Bigg)\xrightarrow[]{D} N(0,2T\sigma^4)    \]
+\rule{\textwidth}{1pt}
+
+
+\section*{Problem 6}
+Let $f(x) = e^{-x^3}$.
+\begin{enumerate}
+\item Compute  $\int_{0}^1f(x)dx$ using Monte Carlo. Compare with the true value.
+
+\rule{\textwidth}{1pt}
+
+
+\rule{\textwidth}{1pt}
+\item Do the simulation many times, and plot the histogram of the errors. Rescale your error in a way so that
+your new histogram looks like a bell-shape curve $\frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}$.
+
+\rule{\textwidth}{1pt}
+
+
+\rule{\textwidth}{1pt}
+\item Construct $\alpha-$confidence intervals for your Monte Carlo result for $\alpha$ = 50\%, 75\%, 95\%. How do you check (again by simulation) that the interval you constructed is indeed the $\alpha-$confidence interval? Is your way of checking becoming harder as $\alpha$ increases?
+\rule{\textwidth}{1pt}
+
+
+\rule{\textwidth}{1pt}
+\end{enumerate}
+
+\end{document}
