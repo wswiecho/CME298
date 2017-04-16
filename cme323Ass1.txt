@@ -1,0 +1,431 @@
+\documentclass[12pt]{article}
+
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,url}
+\usepackage{bbm}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage{courier}
+
+\newfont{\bssdoz}{cmssbx10 scaled 1200}
+\newfont{\bssten}{cmssbx10}
+
+
+\oddsidemargin  0in \evensidemargin 0in \topmargin -0.5in
+\headheight 0.25in \headsep 0.25in
+\textwidth   6.5in \textheight 9in %\marginparsep 0pt \marginparwidth 0pt
+\parskip 1.5ex  \parindent 0ex \footskip 20pt
+
+\begin{document}
+\parindent 0ex
+\thispagestyle{empty} \vspace*{-0.75in}
+{\bssdoz CME 323: Distributed Algorithms and Optimization}
+{\\ \bssten Instructor: Reza Zadeh (rezab@stanford.edu) }
+{\\ \bssten HW\#1 --  Due at the beginning of class April 19th}
+\vspace{5pt}
+
+\begin{enumerate}
+\item 
+The Karatsuba algorithm multiplies two integers $x$ and $y$. Assuming each has $n$ bits where $n$ is a power of 2, it does this by splitting the bits of each integer into two halves, each of size $n/2$. For any integer $x$ we will refer to the low order bits as $x_l$ and the high order as $x_h$. The algorithm computes the result as follows:\footnote{If you have seen this before, you might have thought of it as a sequential algorithm, but actually it is a parallel algorithm, since in particular, the three recursive calls to {\bf km} can be made in parallel.} \\
+
+\begin{algorithmic}
+\STATE function {\bf km}($x,y,n$):
+\IF {$n = 1$}
+	\STATE return $x \times y$
+\ELSE
+	\STATE $a \leftarrow \mbox{{\bf km}}(x_l,y_l)$
+	\STATE $b \leftarrow \mbox{{\bf km}}(x_h,y_h)$
+	\STATE $c \leftarrow \mbox{{\bf km}}(x_l+x_h,y_l+y_h)$
+	\STATE $d \leftarrow c-a-b$
+	\STATE return $(b2^n+d2^{n/2}+a)$
+\ENDIF
+\end{algorithmic}
+
+Note that multiplying by $2^k$ can be done just by shifting the bits over $k$ positions.
+
+\begin{enumerate}
+\item [(a.)]
+Assuming addition, subtraction, and shifting take $O(n)$ work and $O(n)$ depth what is the work and depth of {\bf km}?
+~\\
+~\\
+\textbf{Work Analysis:}~\\
+Based on the given pseudocode, we know that each invocation of the Kartashuba Multiply with size $n-bit$ integers calls invokes the Kartashuba Multiply three times in parallel. Each invocation in parallel is going to be using an input of size $\frac{n}{2}$. It is also important to note that in the base case, we perform a multiplication between single digits which takes $O(1)$ work. We however perform $3^i$ such single digit multiplications, where $i$ is a positive integer. That comes from the fact that each integer $x$ and $y$ each has $n$ bits where $n$ is a power of two. Then by the definition of an integer being decomposed into a product of 2, we can write $n=2^i$ where $i$ is a positive integer. ~\\
+~\\
+Thus we can write the work in the following form: 
+\[ W(n) = 3W\Big(\frac{n}{2}\Big) + f(n) \]
+~\\
+where $f(n)$ is the work necessary to perform addition, subtraction, and shifting. \\
+~\\
+By the notation used in the Master's theorem and the formulation of the work $W(n)$, it follows that $a=3$ and $b=2$. Therefore, we have that f(n) must be O(n) making $c=1$. Then by Case 1, of the Master's theorem it follows that \[W(n)=O\Big(n^{log_23}\Big).\]
+~\\
+\textbf{Depth Analysis:}~\\ 
+We are given in the problem description that addition, subtraction, and shifting has depth O(n). We also know that each recursive call to the Kartashuba Multiply is performed in parallel. Thus indicates an independence between the recursive calls.
+~\\
+~\\
+Thus we can write the depth in the following form: 
+\[ D(n) = D\Big(\frac{n}{2}\Big) + f(n) = D\Big(\frac{n}{2}\Big) + \gamma n \]
+~\\
+where $f(n)$ is the work necessary to perform addition, subtraction, and shifting and $\gamma \in R$. \\
+~\\
+By the notation used in the Master's theorem and the formulation of the depth $D(n)$, it follows that $a=1$ and $b=2$. Therefore, we have that f(n) must be $\Omega$(n) as $\log_21=0$. Then by Case 3 (choosing $\frac{1}{2} < k < 1$, we have that $af\big(\frac{n}{b}\big) = \gamma \frac{n}{2} < k \gamma n \le kf(n)$), of the Master's theorem it follows that \[D(n)= O(n).\]
+~\\
+\item [(b.)]
+Assuming addition, subtraction, and shifting take $O(n)$ work and $O(\log n)$ depth what is the work and depth of {\bf km}?
+~\\
+~\\
+\textbf{Work Analysis:}~\\
+Based on the given pseudocode, we know that each invocation of the Kartashuba Multiply with size $n-bit$ integers calls invokes the Kartashuba Multiply three times in parallel. Each invocation in parallel is going to be using an input of size $\frac{n}{2}$. It is also important to note that in the base case, we perform a multiplication between single digits which takes $O(1)$ work. We however perform $3^i$ such single digit multiplications, where $i$ is a positive integer. That comes from the fact that each integer $x$ and $y$ each has $n$ bits where $n$ is a power of two. Then by the definition of an integer being decomposed into a product of 2, we can write $n=2^i$ where $i$ is a positive integer. ~\\
+~\\
+Thus we can write the work in the following form: 
+\[ W(n) = 3W\Big(\frac{n}{2}\Big) + f(n) \]
+~\\
+where $f(n)$ is the work necessary to perform addition, subtraction, and shifting. \\
+~\\
+By the notation used in the Master's theorem and the formulation of the work $W(n)$, it follows that $a=3$ and $b=2$. Therefore, we have that f(n) must be O(n) making $c=1$. Then by Case 1, of the Master's theorem it follows that \[W(n)=O\Big(n^{log_23}\Big).\]
+~\\
+\textbf{Depth Analysis:}~\\ 
+We are given in the problem description that addition, subtraction, and shifting has depth $O(\log n)$. We also know that each recursive call to the Kartashuba Multiply is performed in parallel. Thus indicates an independence between the recursive calls.
+~\\
+~\\
+Thus we can write the depth in the following form: 
+\[ D(n) = D\Big(\frac{n}{2}\Big) + f(n)  \]
+~\\
+where $f(n) = O(\log n)$ is the work necessary to perform addition, subtraction, and shifting and $\gamma \in R$. \\
+~\\
+By the notation used in the Master's theorem and the formulation of the depth $D(n)$, it follows that $a=1$ and $b=2$. Therefore, we have that f(n) must be O(n) as $\log_21=0$ with $c=0$. Then by Case 2 (setting $k=1$), of the Master's theorem it follows that \[D(n) = O(\log^2n).\]
+\end{enumerate}
+
+\item
+Suppose a square matrix is divided into blocks:
+\begin{align*}
+M = \begin{bmatrix}
+       A & B  \\
+       C & D
+     \end{bmatrix}
+\end{align*}
+where all the blocks are the same size. The \emph{Schur complement} of block $D$ of $M$ is $S = A-BD^{-1}C$. The inverse of the matrix $M$ can then be expressed as:
+\begin{align*}
+M^{-1} = \begin{bmatrix}
+       S^{-1} & S^{-1}BD^{-1}  \\
+       -D^{-1}CS^{-1} & D^{-1}+D^{-1}CS^{-1}BD^{-1}
+     \end{bmatrix}
+\end{align*}
+This basically defines a recursive algorithm for inverting a matrix which makes two recursive calls (to calculate $D^{-1}$ and $S^{-1}$), several calls to matrix multiply, and one each to elementwise add and subtrace two matrices. Assuming that matrix multiply has work $O(n^3)$ and depth $O(\log n)$ what is the work and depth of this inversion algorithm?
+~\\
+~\\
+\textbf{Work Analysis:}~\\
+Based on the problem description, we are given that this algorithm makes two recursive calls. One is to calculate $D^{-1}$ and other to get $S^{-1}$, both obtained by passing as input a square matrix with half of the size of the matrix in the previous call (make a note that $D^{-1}$ is necessary to get $S^{-1}$ as $S = A-BD^{-1}C$, which will make an impact in the depth analysis). It also performs several calls to matrix multiply which has work $O(n^3)$ and performs work to get element-wise additions/subtractions. That work is of order $n^2$ because its element-wise.  
+~\\
+~\\
+Thus we can write the work in the following form: 
+\[ W(n) = 2W\Big(\frac{n}{2}\Big) + f(n) \]
+~\\
+where $f(n) = \gamma n^3 + \lambda n^2$ (since for large n, $n^3>>n^2$, we can ignore the $n^2$ term completly) is the work necessary to perform addition, subtraction, and shifting and $\gamma, \lambda \in R$. \\
+~\\
+By the notation used in the Master's theorem and the formulation of the work $W(n)$, it follows that $a=2$ and $b=2$. Therefore, we have that since, $f(n)\approx \gamma n^3$, it follows that $c=3$. Then by Case 3 (choosing $\frac{1}{2} < k < 1$, we have that $af\big(\frac{n}{b}\big) = \gamma \frac{n^3}{4} < \frac{1}{2}\gamma n^3 < k \gamma n^3 \le kf(n)$), of the Master's theorem it follows that \[W(n)=O\Big(n^3\Big).\]
+~\\
+\textbf{Depth Analysis:}~\\ 
+As mentioned before we cannot make the calls to compute $D^{-1}$ and $S^{-1}$ parallel because $S^{-1}$ depends on $D^{-1}$. We are also given that every multiply call has depth $O(\log n)$. And lastly we need to analyze the depth of every element-wise addition/subtraction. Since, we have these operations done element-wise, each one can be performed independently of another taking constant time O(1). 
+~\\ 
+~\\
+Thus we can write the depth in the following form: 
+\[ D(n) = 2D\Big(\frac{n}{2}\Big) + f(n)  \]
+~\\
+where $f(n) = O(\log n)$  is the depth necessary to perform addition, subtraction, and multiplication. \\
+~\\
+By the notation used in the Master's theorem and the formulation of the depth $D(n)$, it follows that $a=2$ and $b=2$ making $\log_22=1$. So, since f(n) = $O(\log n)$, we need to rewrite the big O notation in more familiar form. We know that $\log n< \sqrt{n}$. Hence, $O(\log n) \approx O(\sqrt{n})$, making $c=\frac{1}{2} < \log_22$. Then by Case 1, of the Master's theorem it follows that \[D(n) = O(n).\]
+
+\item
+Describe a divide-and-conquer algorithm for merging two sorted arrays of lengths $n$ into a sorted array of length $2n$. It needs to run in $O(n)$ work and $O(\log^2 n)$ depth. You can write the pseudocode for your algorithm so that it looks like your favorite sequential language (C, Java, Matlab, \dots), but with an indication of which loops or function calls happen in parallel. For example, use \texttt{parallel for} for a parallel for loop, and something like:
+
+\texttt{parallel $\{$} \\
+\hspace*{10 mm}\texttt{foo(x,y)} \\
+\hspace*{10 mm}\texttt{bar(x,y)} \\
+\texttt{$\}$} \\
+to indicate that \texttt{foo} and \texttt{bar} are called in parallel. You should prove correctness at the level expected in an algorithms class (e.g. CME305 or CS161).
+~\\
+~\\
+% Input : Sorted arrays A, B, where |A| = n and |B| = m 
+% Output: Merged and Sorted array C of length n + m 
+% if n<=1andm<=1then return A and B in sorted order; 
+% if m mod2==1then j←(m−1)/2;
+% else j←m/2;
+%
+% i ← max index of corresponding element in A such that A[0 : i] ≼ B[0 : j]
+% /* In Parallel, DO: */
+% a ← Merge(A[0:i], B[0:j])
+% b ← Merge(A[i:n], B[j:m])
+%/* END Parallel */ 
+% return concatenate(a,b)
+~\\
+~\\
+\textbf{Interworking of the Algorithm:}
+~\\
+
+
+~\\
+~\\
+Recall that on a single machine, we can solve this problem in O(n) time by maintaining a pointer to the head of each sorted array, stepping through both arrays simultaneously, appending the lesser element of the two arrays to the sorted output, and incrementing the corresponding pointer; this iterates for at most 2n steps.
+Notice that we may find the median of a sorted array in O(1) time. Let n = |A|. If n odd, then the median element is uniquely determined by index (n − 1)/2 (where we index starting from 0). If n even, there are two medians with indices at n/2 and n/2−1.
+Below, ≼ denotes the element-wise inequality operator. In our pseudo-code, we index an array just like arrays are sliced in python, e.g. a[1:j] means that we start at the second element and take all elements up to but not including index j. \\
+Notice that when j defined as above in our algorithm, max{a[0:i], b[0:j]} ≤ min{a[i:n], b[j:m]}
+and that a and b are sorted. This is why after our recursive calls return a and b, we claim that we may simply concatenate the result and maintain our sort-guarantee. Further, we also claim that this algorithm has work O(n) and depth O(log2 n).
+In the recursion tree at depth d, there are 2d calls made to the merge procedure, denoted by Merge(Ad,i, Bd,i) for i = 1, 2, . . . , 2d. Each of the Bd,i are of size exactly
+m/2d, and note that the size of Ad,i’s are such that  2d |Ad,i| = n. i=1
+Searching for the element in A such that A[0 : i] ≼ B[0 : n/2] using a binary search on our sorted array A requires O(log n) work on a single processor. Therefore, we see that total work for taking two sorted arrays of size n is given by
+
+\item
+Given the price of a stock at each day for $n$ days, we want to determine the biggest profit we can make by buying one day and selling on a later day. For example, the following stock prices have a best profit of 5:
+
+\texttt{$[12,11,10,8,5,8,9,6,7,7,10,7,4,2]$}
+
+since we can buy at 5 on day 5 and sell at 10 on day 11. This has a simple linear time serial solution. Give an algorithm to solve this problem that runs in $O(n)$ work and $O(\log n)$ depth. Give pseudocode as in the previous problem.
+~\\
+~\\
+\textbf{Interworking of the Algorithm:}
+~\\
+Lets an array A with prices of the stock at each day for $n$ days be of length $n$. We are going to treat A as an inputs of this algorithm. Since, we are interested in the biggest profit we can make by buying a stock on one day and selling on some later day we need to find the biggest difference between the stock price and the selling price on consecutive days. We will approach that in multiple steps. First we are going to find the min stock price for each subpart of the array. That is, we employ a scan function which outputs an array, call it B of size n where each index $i$ corresponds to the minimum element of A in the range A[0, $i$]. Using the example array $A=[12,11,10,8,5,8,9,6,7,7,10,7,4,2]$, the scan function would output an array that looks like $B=[12,11,10,8,5,5,5,5,5,5,5,5,4,2]$. Now the algorithm will find element-wise difference between A and B, which will be an array C. Once again using the example array will produce $C=[0,0,0,0,0,3,4,1,2,2,5,2,0,0]$. Finally, the algorithm will establish the maximum value of C and check if the value is greater than 0. If the maximum value is greater than 0 we return it, otherwise return 0.~\\
+~\\
+\textbf{Work Analysis:}~\\
+The first work is done when the scan function is employed. The interworking of the scan function is very similar to the all prefixsum function. That is, it may be employed in the same exact way just producing a different output. Hence, by the course notes we know that the work necessary to produce the output in the scan function will be O(n). Then we need to compute the array B, which involves computation of element-wise subtractions. These are done in parallel which takes O(n) work. Next, we  find the maximum of C which will take O(n) work by employing the algorithm described in 5(b). Finally, we check if the value found is greater than 0, which takes O(1) work. Thus, the total work will be 
+\[W(n) = O(n)\]
+
+
+
+~\\
+\textbf{Depth Analysis:}~\\
+The first depth analysis occurs when the scan function is employed. The interworking of the scan function is very similar to the all prefixsum function. That is, it may be employed in the same exact way just producing a different output. Hence, by the course notes we know that the depth of this function call is O($\log n$). Then we need to compute the array B, which involves computation of element-wise subtractions. These are done in parallel which takes O(1) depth. Next, we find the maximum of C which will take O($\log n$) depth by employing the algorithm described in 5(b). Finally, we check if the value found is greater than 0, which has depth O(1).Thus, the total depth of this algorithm is
+\[D(n) = O(\log n)\]
+
+~\\
+Let call the algorithm in 5(b) {\bf{max}}.
+\begin{algorithm}
+\caption{Max Stock Income}
+\label{CHalgorithm}
+\begin{algorithmic}
+\STATE {\bf Input: } Array A (where $|A|=n$) with prices of the stock at each day for $n$ days.
+\STATE
+\STATE {\emph{ Parallel:} } 1. minRange $\leftarrow$ {\bf{scan}}(A)
+\STATE {\emph{ Parallel:$^3$} } 2. diffStocks  \hspace{.05cm}$\leftarrow$ A-minRange
+\STATE \hspace{1.95cm} 3. maxProfit $\leftarrow$ {\bf{max}}(differenceStocks)
+\STATE 
+\IF {$maxProfit > 0$}
+	\STATE return $maxProfit$
+\ELSE
+	\STATE return $0 $
+\ENDIF
+\STATE
+\STATE {\bf Output: } The biggest nonnegative profit we can make given stock array A.
+\end{algorithmic}
+\end{algorithm}
+ ~\\
+{\small{$^3$ Parallelism occurs for element-wise subtraction.}} 
+~\\
+\item
+In this problem, we'll look at how fast the maximum of a set of $n$ elements can be computed when allowing for concurrent writes. In particular we allow the arbitrary write rule for ``combining'' (i.e. if there are a set of parallel writes to a location, one of them wins). Show that this can be done in $O(\log \log n)$ depth and $O(n)$ work.
+
+\begin{enumerate}
+\item [(a.)]
+Describe an algorithm for maximum that takes $O(n^2)$ work and $O(1)$ depth (using concurrent writes).~\\
+~\\
+\textbf{Interworking of the Algorithm:}
+~\\
+Let's name an $i^{th}$ element in the set $x_i$. Then we are going to have $x_1, x_2, \cdots, x_n$ elements. Let's also call an $i^{th}$ bit $b_i$ and let it be associated with the element $x_i$. First we need to initialize each one of the bits. We are going to set all of them equal to 1, i.e., we assume that all of them are turned on. Now, we are going to make comparisons between two different elements $x_i$ and $x_j$ st. $i\not=j$ and begin possible overwriting of the $b_i$'s and $b_j$'s based on the comparisons. That is, if $x_i > x_j$ we set $b_j=0$ (we turn it off so if concurrent writes occur we do not worry because the writes will want to turn the bit off anyways. Thus, we allow for the concurrent writes to the same memory location) and otherwise we set $b_i =0$. That type of overwriting of associated bits is reasonable because if $x_i > x_j$, $x_j$ cannot be the maximum of the set so in this algorithm the bit of 0 indicates that. We return the element corresponding to non-zero bit $b_i$ where $i\in\{1,2, \dotsc, n\}$. Again we are not concerned with the output being overwritten because by the above comparison the overwriting will happen only if two outputs have the same value (only bits that will be turned on will be the bits corresponding to $x_i=x_j$).
+~\\
+~\\
+\textbf{Work Analysis:}
+~\\
+Initialization of the bits $b_i$ with $i\in\{1, 2, \dotsc, n\}$ takes work O(n). We then need to assess the work done when comparing all $n$ elements $x_i$ with all elements $x_j$. It should be clear that there will be $\frac{n(n+1)}{2}$ total comparisons done. That takes O($n^2$) work. Finally, returning of the maximum value is going to take work O(n) because we need to check if the bit associated with a particular element is turned on or off. Hence, the total work is dominated by the comparisons between two elements making 
+\[W(n) = O(n^2)\]
+
+~\\
+\textbf{Depth Analysis:}
+~\\
+Initialization of the bits $b_i$ with $i\in\{1, 2, \dotsc, n\}$ takes depth O(1) because each bit $b_i$ can be initialized independently from the bit $b_j$ where $i\not=j$.  We then need to assess the depth associated with comparing all $n$ elements $x_i$ with all elements $x_j$. It should be clear that there will be O(1) depth because each comparison can be done independently of the other. The overwriting part is when we might have had some problems. But since, we would overwrite the value of any $b_i$ with 0, we do not care if two processors write to the same memory location, as they write a value of 0 there. Thus, it does not matter which processor's output for $b_i$ will be kept. Finally, returning of the maximum value has constant depth because we need to check if the bit associated with a particular element is turned on or off and all that can be done in parallel. Hence, the total depth is
+\[D(n) = O(1)\]
+
+~\\
+\item [(b.)]
+Use this to develop an algorithm with $O(n)$ work and $O(\log \log n)$ depth. Hint: use divide and conquer, but with a branching factor greater than 2.
+~\\
+~\\
+\textbf{Interworking of the Algorithm:}
+~\\
+As suggested in the hint, we are going to use the Divide and Conquer algorithm to lower the complexity of the work to O(n) and depth to $O(\log \log n)$. Let's take a branching factor to be $n^{1/3} > 2$, which makes the size of each one of the $n^{1/3}$ arrays $n^{2/3}$. We then find the maximum of each of the arrays recursively (reaches the base case when $n\le 2$). To obtain the maximum of each array we use the algorithm described above (part (a)).
+~\\
+~\\
+\textbf{Work Analysis:}
+\begin{align*}
+General: \ \ \ \ W(n) &= n^{1/3}W(n^{2/3}) +O(n^{2/3}) \\
+First \ level: \ \ \ \ \ \ \  \ \ &=n^{1/3}\Bigg(\Big(n^{2/3}\Big)^{1/3}W(n^{4/9}) +O(n^{4/9}) \Bigg) +O(n^{2/3}) \\
+Second \ level: \ \ \  \  \ \ \ &=n^{1/3}\Bigg[\Big(n^{2/3}\Big)^{1/3} \Bigg(\Big(n^{4/9}\Big)^{1/3}W(n^{8/27}) + O(n^{8/27})\Bigg) +O(n^{4/9}) \Bigg] +O(n^{2/3})
+\end{align*}
+We know assess how many steps will be performed. Given that the recursion bottoms out when $n\le 2$ and we have a branching factor of $n^{1/3}$. It follows that 
+\begin{align*}
+\Big(n^{1/3}\Big)^i & = 2 \\
+\Big({1/3}\Big)^i\log n & = \log 2 \\
+3^i & = \log_2 n \\
+i & = \log_3\big(\log_2n)
+\end{align*}
+We also know that W(2)=O(1), so we need to compute the work for $\log_{3/2}\big(\log_2n\big)$ levels in total. That can be performed using the following formula (we already observed a patter that emerged in the evaluations of the first two levels of work) 
+\begin{align*}
+W(n) &=n^{1/3}\Bigg[\Big(n^{2/3}\Big)^{1/3} \Bigg(\Big(n^{4/9}\Big)^{1/3}W(n^{8/27}) + O(n^{8/27})\Bigg) +O(n^{4/9}) \Bigg] +O(n^{2/3}) \\
+&= O(n^{2/3}) + n^{1/3}O(n^{4/9})  +  n^{1/3}\Big(n^{2/3}\Big)^{1/3}O(n^{8/27}) \\
+&+  n^{1/3}\Bigg[\Big(n^{2/3}\Big)^{1/3} \Bigg(\Big(n^{4/9}\Big)^{1/3}W(n^{8/27})\Bigg)\Bigg] = \sum_{i=1}^{\log_{3/2}(\log_2n)} O\Big(n^{[2/3]^i}\Big) \prod_{j=0}^{i-1} \Big( n^{[2/3]^j}\Big)\\
+& =  \sum_{i=1}^{\log_{3/2}(\log_2n)} O\Big(n^{[3^i-2^{i-1}]/3^i}\Big) = \sum_{i=1}^{\log_{3/2}(\log_2n)} \frac{O(n)}{O(n^{[2/3]^{i/2}})} = O(n) \sum_{i=1}^{\log_{3/2}(\log_2n)} \frac{1}{O(n^{[2/3]^{i/2}})} \\
+&= O(n) O(1) = O(n)
+\end{align*}
+~\\
+~\\
+\textbf{Depth Analysis:}
+\begin{align*}
+General: \ \ \ \ D(n) &= D(n^{2/3}) +O(1) \\
+First \ level: \ \ \ \ \ \  \ \ &= D(n^{[2/3]^2}) +2O(1)
+\end{align*}
+As described above we have constant depth of each step of the recursion. We also established how many recursion levels we need to run to reach the base case, i.e., $\log_3\big(\log_2n)$. Hence, we have that 
+\begin{align*}
+D(n) &= O(\log_3\big(\log_2n)) = O(\log (\log n))  \\
+\end{align*}
+\end{enumerate}
+
+\item In this set of problems, we review how to \emph{select} data from relational databases.
+  \begin{enumerate}     \item[(a.)] Write a SQL statement to find the total purchase amount of all orders. Sample table: \texttt{orders}.
+  \begin{verbatim} 
+ord_no      purch_amt   ord_date    customer_id  salesman_id 
+----------  ----------  ----------  -----------  ----------- 
+70001       150.5       2012-10-05  3005         5002 
+70009       270.65      2012-09-10  3001         5005 
+70002       65.26       2012-10-05  3002         5001 
+70004       110.5       2012-08-17  3009         5003 
+70007       948.5       2012-09-10  3005         5002   
+\end{verbatim}
+
+~\\
+\textbf{Solution}: ~\\
+We want to compute the sum of all elements in the $punch\_amt$ column. Thus, we will need to first select all elements in the column that we want to include in the computation, then specify the type of the operation that will be performed and then specify the table name from which we want to extract the information from. ~\\
+~\\
+The code will look as follows: ~\\
+SELECT SUM (purch\_amt) \\
+FROM orders;
+~\\
+~\\
+The numerical solution is: ~\\
+1545.41
+~\\
+    \item[(b.)] Write a SQL statement which selects the highest grade for each of the cities of the customers. Sample table: \texttt{customer}.
+      \begin{verbatim} 
+customer_id  cust_name     city        grade       salesman_id 
+-----------  ------------  ----------  ----------  ----------- 
+3002         Nick Rimando  New York    100         5001 
+3005         Graham Zusi   California  200         5002 
+3001         Brad Guzan    London                  5005 
+3004         Fabian Johns  Paris       300         5006 
+3007         Brad Davis    New York    200         5001       
+\end{verbatim}
+~\\
+\textbf{Solution}: ~\\
+We want to selects the highest grade, $grade$ for each of the cities, $city$ of the customers $cust\_name$. Thus, we will need to first select a city and then find the highest grade that corresponds to it. Then we define the table name from which we want to extract the information. Finally, we display the results grouping them by city~\\
+~\\
+The code will look as follows: ~\\
+SELECT city, MAX(grade) \\
+FROM customer \\
+GROUP BY city;\\
+~\\
+
+
+    \item[(c.)] Write a SQL statement to find the highest purchase amount on a date ``2012-08-17'' for each salesman with their ID. Sample table: \texttt{orders}, used in (a).
+    ~\\
+    ~\\
+    \textbf{Solution}: ~\\
+We want to find the highest purchase amount $purch\_amt$ on a date ``2012-08-17'', $ord\_date$ for each salesman, $salesman\_id$ with their ID. Thus, we will need to first select a salesman and specify that we want to find the maximum of the purchase amount. Then we define the table name from which we want to extract the information. Next, we need to limit the time frame for which the highest purchase needs to be found to the chosen date. Finally, we display the results grouping them by salesman ID, $salesman\_id$~\\
+~\\
+The code will look as follows: ~\\
+SELECT salesman\_id, MAX(purch\_amt)\\ 
+FROM orders \\
+WHERE ord\_date = '2012-08-17' \\
+GROUP BY salesman\_id;\\
+    ~\\
+  \end{enumerate}
+
+\item
+ In this problem, we review how to \emph{merge} two tables together. 
+\begin{enumerate}   \item [(a.)]  Write a SQL statement to know which salesman are working for which customer. Use the sample table \texttt{customer}, used in previous problem, and also \texttt{salesman}.
+
+\begin{verbatim}
+salesman_id  name        city        commission 
+-----------  ----------  ----------  ---------- 
+5001         James Hoog  New York    0.15 
+5002         Nail Knite  Paris       0.13 
+5005         Pit Alex    London      0.11 
+5006         Mc Lyon     Paris       0.14 
+5003         Lauson Hen              0.12
+\end{verbatim}
+~\\
+~\\
+SELECT a.cust\_name AS "Customer Name", \\
+a.city, b.name AS "Salesman", b.commission \\
+FROM customer a \\
+INNER JOIN salesman b \\
+ON a.salesman\_id=b.salesman\_id; 
+
+
+
+  \item [(b.)] Write a query to display all salesmen and customers located in London.
+~\\
+~\\
+SELECT salesman\_id, name\\
+FROM salesman\\
+WHERE city='London'\\
+UNION\\
+SELECT customer\_id, cust\_name\\
+FROM customer\\
+WHERE city='London';\\
+
+  \item [(c.)] Write a SQL statement to make a cartesian product between \texttt{salesman} and \texttt{customer} i.e. each salesman will appear for all customer and 
+    vice versa for those salesmen who belongs to a city and the customers who must have a grade.
+    ~\\
+    ~\\
+    SELECT * \\
+FROM salesman a \\
+CROSS JOIN customer b \\
+WHERE a.city IS NOT NULL; \\
+
+  \item[(d.)] Write a SQL statement to make a report with customer name, city, order number, order date, and order amount in ascending order according to the order date to find that either any of the existing customers have placed no order or placed one or more orders. Use \texttt{customer} and \texttt{orders} tables.~\\
+  ~\\
+SELECT a.cust\_name,a.city, b.ord\_no,\\
+b.ord\_date,b.purch\_amt AS "Order Amount" \\
+FROM customer a \\
+LEFT OUTER JOIN orders b \\
+ON a.customer\_id=b.customer\_id \\
+order by b.ord\_date;\\
+
+ \end{enumerate}
+
+\item In this problem, we consider \emph{aggregation} of data.
+\begin{enumerate}   \item[(a.)] Write a SQL statement to find the highest purchase amount ordered by the each customer on a particular date with their ID, order date and highest purchase amount.
+Sample table: \texttt{orders}, used in problem 6 part (a).
+~\\
+~\\
+SELECT customer\_id,ord\_date,MAX(purch\_amt) \\
+FROM orders \\
+GROUP BY customer\_id, ord\_date; \\
+
+\item[(b.)] Write a SQL query to display the average price of each company's products, along with their code. Sample table: \texttt{item\_mast}.
+\begin{verbatim}
+PROD_ID   PROD_NAME     PROD_PRICE    PROD_COMPANY 
+-------   ---------    -----------    ------------ 
+101      Mother Board     3200         15 
+102      Key Board         450         16 
+103      ZIP drive         250         14 
+104      Speaker           550         16 
+105      Monitor          5000         11 
+106      DVD drive         900         12 \end{verbatim}
+ \end{enumerate}
+ ~\\
+ ~\\
+   SELECT AVG(pro\_price) AS "Average Price of the Company", \\
+       pro\_com AS "Company Code"\\
+    FROM item\_mast\\
+GROUP BY pro\_com;\\
+\end{enumerate}
+\end{document}
